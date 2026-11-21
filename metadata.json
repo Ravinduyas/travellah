@@ -1,0 +1,6 @@
+{
+  "name": "Travellah",
+  "description": "Airport transfers between Colombo airport and Sri Lanka's south coast, plus private tour packages.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
