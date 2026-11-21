@@ -1,4 +1,4 @@
-import { Briefcase, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { CtaBannerSection } from '../components/CtaBannerSection';
 import { FaqSection } from '../components/FaqSection';
 import { PageHero } from '../components/PageHero';
@@ -25,7 +25,7 @@ export function TransfersPage() {
       <PageHero
         eyebrow="AIRPORT TRANSFERS"
         title="Colombo airport pick-up and drop-off for the *south coast*"
-        intro={`Private, air-conditioned transfers between ${CONTACT.airport} and Galle, Weligama, Mirissa, Tangalle and every town in between. Fixed prices, tolls included.`}
+        intro={`Private, air-conditioned transfers between ${CONTACT.airport} and Ahangama, Weligama, Mirissa, Tangalle and every town in between. Fixed prices, tolls included.`}
         image={IMAGES.transfersHero}
         imageAlt="Coastal road above a turquoise bay"
       >
@@ -50,7 +50,7 @@ export function TransfersPage() {
         <h2 className="text-[32px] sm:text-[40px] lg:text-[44px] font-normal tracking-[-0.02em] text-[#171717] leading-[1.15] mb-8 text-balance">
           <SplitWords text="Colombo Airport to the south coast, in *numbers*" />
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {ROUTES.filter((r) => r.popular).map((r, i) => {
             const van = VEHICLES.find((v) => v.id === 'van') ?? VEHICLES[0];
             const vanPrice = calculateTransferQuote(r.carPrice, van.multiplier, 'one-way').total;
@@ -147,10 +147,7 @@ export function TransfersPage() {
               <p className="text-[12.5px] text-neutral-500 mt-1">{v.example}</p>
               <div className="flex gap-5 mt-5 text-[13px] text-[#404040]">
                 <span className="inline-flex items-center gap-1.5">
-                  <Users className="w-4 h-4 text-[#4694A4]" aria-hidden="true" /> {v.seats} people
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Briefcase className="w-4 h-4 text-[#4694A4]" aria-hidden="true" /> {v.bags} bags
+                  <Users className="w-4 h-4 text-[#4694A4]" aria-hidden="true" /> Up to {v.seats} passengers
                 </span>
               </div>
               <ul className="mt-5 space-y-1.5 text-[12.5px] text-[#666666] flex-1">

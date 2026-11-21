@@ -213,7 +213,7 @@ export function getSeo(rawPath: string): PageSeo {
     return page(
       '/',
       `Colombo Airport Transfers to the South Coast | ${brand}`,
-      `Private airport pick-up and drop-off between Colombo Airport (CMB) and Galle, Weligama, Mirissa and Tangalle. Fixed prices from $${cheapestSouth}, tolls included.`,
+      `Private airport pick-up and drop-off between Colombo Airport (CMB) and Ahangama, Weligama, Mirissa and Tangalle. Fixed prices from $${cheapestSouth}, tolls included.`,
       graph(business(), website(), transferService()),
     );
   }
@@ -221,7 +221,7 @@ export function getSeo(rawPath: string): PageSeo {
   if (path === '/transfers') {
     return page(
       path,
-      `Colombo Airport Taxi: Galle, Weligama & Mirissa | ${brand}`,
+      `Colombo Airport Taxi: Weligama, Mirissa & Tangalle | ${brand}`,
       `Colombo Airport (CMB) to Weligama from $${WELIGAMA?.carPrice} (${WELIGAMA?.duration}). Fixed prices to ${ROUTES.length} towns, private car or van, flight tracking and tolls included.`,
       graph(
         business(),

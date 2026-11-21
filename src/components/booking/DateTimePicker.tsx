@@ -60,12 +60,12 @@ function MonthGrid({
 
   return (
     <div className="min-w-0">
-      <p className="text-center text-[13px] font-medium text-[#171717] mb-3">
+      <p className="text-center text-[13px] font-medium text-[#171717] mb-1.5">
         {first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
       </p>
-      <div className="grid grid-cols-7 gap-y-1 text-center">
+      <div className="grid grid-cols-7 gap-y-0.5 text-center">
         {WEEKDAYS.map((w) => (
-          <span key={w} className="text-[10.5px] font-medium uppercase tracking-[0.04em] text-neutral-400 pb-1">
+          <span key={w} className="text-[10.5px] font-medium uppercase tracking-[0.04em] text-neutral-400 pb-0.5">
             {w}
           </span>
         ))}
@@ -82,7 +82,7 @@ function MonthGrid({
               onClick={() => onPick(iso)}
               aria-pressed={selected}
               aria-label={fromIso(iso).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-              className={`relative mx-auto w-9 h-9 rounded-full text-[12.5px] tabular-nums transition-colors ${
+              className={`relative mx-auto w-9 h-8 sm:w-8 rounded-full text-[12.5px] tabular-nums transition-colors ${
                 selected
                   ? 'bg-[#171717] text-white font-medium'
                   : disabled
@@ -183,7 +183,8 @@ export function DateTimeFields({
 
   return (
     <div ref={wrapRef}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* side by side on every screen, so the calendar starts higher on phones */}
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
         <div>
           <span id={`${id}-date-label`} className={labelClass}>
             {dateLabel}
@@ -243,7 +244,7 @@ export function DateTimeFields({
             }}
             className="overflow-hidden scroll-mb-28 lg:scroll-mb-6 scroll-mt-24"
           >
-            <div className="mt-3 rounded-2xl border border-neutral-200 bg-white p-4 sm:p-5 shadow-[0_12px_32px_rgba(0,0,0,0.06)]">
+            <div className="mt-2 rounded-2xl border border-neutral-200 bg-white p-3 sm:p-4 shadow-[0_12px_32px_rgba(0,0,0,0.06)]">
               {panel === 'date' ? (
                 <div className="relative">
                   <button
@@ -265,7 +266,7 @@ export function DateTimeFields({
                     <ChevronRight className="w-4 h-4" aria-hidden="true" />
                   </button>
                   {/* two months side by side; one on phones */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 pt-1.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-0.5">
                     <MonthGrid month={viewMonth} value={date} minIso={minIso} maxIso={maxIso} onPick={pickDate} />
                     <div className="hidden sm:block">
                       <MonthGrid month={addMonths(viewMonth, 1)} value={date} minIso={minIso} maxIso={maxIso} onPick={pickDate} />
@@ -273,17 +274,17 @@ export function DateTimeFields({
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-5 sm:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 sm:gap-6">
                   <div>
-                    <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-neutral-500 mb-2.5">Hour</p>
-                    <div className="grid grid-cols-6 gap-1.5">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-neutral-500 mb-1.5">Hour</p>
+                    <div className="grid grid-cols-6 gap-1">
                       {HOURS.map((h) => (
                         <button
                           key={h}
                           type="button"
                           onClick={() => pickHour(h)}
                           aria-pressed={h === hour}
-                          className={`h-9 rounded-lg text-[12.5px] tabular-nums transition-colors cursor-pointer ${
+                          className={`h-8 rounded-lg text-[12.5px] tabular-nums transition-colors cursor-pointer ${
                             h === hour ? 'bg-[#171717] text-white font-medium' : 'text-[#171717] bg-neutral-50 hover:bg-[#4694A4]/12'
                           }`}
                         >
@@ -293,15 +294,15 @@ export function DateTimeFields({
                     </div>
                   </div>
                   <div>
-                    <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-neutral-500 mb-2.5">Minutes</p>
-                    <div className="grid grid-cols-6 sm:grid-cols-2 gap-1.5 sm:w-[132px]">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-neutral-500 mb-1.5">Minutes</p>
+                    <div className="grid grid-cols-6 sm:grid-cols-2 gap-1 sm:w-[124px]">
                       {MINUTES.map((m) => (
                         <button
                           key={m}
                           type="button"
                           onClick={() => pickMinute(m)}
                           aria-pressed={m === minute}
-                          className={`h-9 rounded-lg text-[12.5px] tabular-nums transition-colors cursor-pointer ${
+                          className={`h-8 rounded-lg text-[12.5px] tabular-nums transition-colors cursor-pointer ${
                             m === minute ? 'bg-[#171717] text-white font-medium' : 'text-[#171717] bg-neutral-50 hover:bg-[#4694A4]/12'
                           }`}
                         >

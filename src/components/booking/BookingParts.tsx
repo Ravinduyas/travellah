@@ -201,7 +201,7 @@ export function BookingStepper({
   const progress = steps.length > 1 ? current / (steps.length - 1) : 0;
 
   return (
-    <nav aria-label="Booking steps" className="mb-7">
+    <nav aria-label="Booking steps" className="mb-5">
       <p className="sr-only">
         Step {current + 1} of {steps.length}: {steps[current].label}
       </p>

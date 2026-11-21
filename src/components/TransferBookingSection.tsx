@@ -8,6 +8,7 @@ import {
   Check,
   History,
   MessageCircle,
+  Plus,
   PlaneLanding,
   PlaneTakeoff,
   RotateCcw,
@@ -131,7 +132,7 @@ function formatDate(iso: string) {
 /** One line of the review screen, with an Edit link back to its step. */
 function ReviewLine({ label, value, onEdit }: { label: string; value: ReactNode; onEdit: () => void }) {
   return (
-    <motion.div variants={rowVariants} className="flex items-start justify-between gap-4 py-3.5 border-b border-neutral-200 last:border-b-0">
+    <motion.div variants={rowVariants} className="flex items-start justify-between gap-4 py-2.5 border-b border-neutral-200 last:border-b-0">
       <div className="min-w-0">
         <dt className="text-[11.5px] text-neutral-500">{label}</dt>
         <dd className="mt-0.5 text-[14px] text-[#171717] font-medium break-words">{value}</dd>
@@ -173,6 +174,7 @@ export function TransferBookingSection({
   const [email, setEmail] = useState(draft?.email ?? '');
   const [notes, setNotes] = useState(draft?.notes ?? '');
   const [errors, setErrors] = useState<Errors>({});
+  const [showNotes, setShowNotes] = useState(false);
 
   const [step, setStep] = useState(draft ? Math.min(draft.step, LAST_STEP) : 0);
   const [maxReached, setMaxReached] = useState(draft ? Math.min(draft.maxReached, LAST_STEP) : 0);
@@ -368,6 +370,7 @@ export function TransferBookingSection({
     setFullName('');
     setEmail('');
     setNotes('');
+    setShowNotes(false);
     setErrors({});
     setMaxReached(0);
     hasMoved.current = true;
@@ -466,6 +469,7 @@ export function TransferBookingSection({
             <label htmlFor="tr-flight" className={labelClass}>
               Flight number
             </label>
+            <div className="sm:flex sm:items-center sm:gap-4">
             <input
               id="tr-flight"
               type="text"
@@ -481,10 +485,12 @@ export function TransferBookingSection({
               }}
               className={`${inputClass} sm:max-w-[260px] uppercase placeholder:normal-case`}
             />
+              {/* the reassurance sits beside the field on larger screens */}
+              <p className="mt-1.5 sm:mt-0 text-[12px] text-neutral-500">
+                We track your flight, so delays are no problem.
+              </p>
+            </div>
             <FieldError message={errors.flightNumber} />
-            <p className="mt-2 text-[12px] text-neutral-500">
-              We track your flight, so your driver is there when you land, even if you are late.
-            </p>
           </Row>
         ) : (
           <Row>
@@ -519,9 +525,10 @@ export function TransferBookingSection({
 
     group: (
       <>
-        <Row>
-          <label htmlFor="tr-pax" className={labelClass}>
-            Passengers
+        {/* label and select on one line to save height */}
+        <Row className="flex items-center justify-between gap-4">
+          <label htmlFor="tr-pax" className="text-[13px] font-medium text-[#171717]">
+            How many passengers?
           </label>
           <select
             id="tr-pax"
@@ -530,7 +537,7 @@ export function TransferBookingSection({
               setPassengers(Number(e.target.value));
               clearError('passengers');
             }}
-            className={`${inputClass} sm:max-w-[220px]`}
+            className={`${inputClass} max-w-[180px]`}
           >
             {Array.from({ length: MAX_TRANSFER_PASSENGERS }, (_, i) => i + 1).map((n) => (
               <option key={n} value={n}>
@@ -538,12 +545,13 @@ export function TransferBookingSection({
               </option>
             ))}
           </select>
-          <FieldError message={errors.passengers} />
         </Row>
+        <FieldError message={errors.passengers} />
         <Row>
           <fieldset>
             <legend className={labelClass}>Vehicle</legend>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* three across on every screen (compact cards), so phones do not stack them */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-1">
               {VEHICLES.map((v) => {
                 const tooSmall = v.seats < passengers;
                 const selected = v.id === vehicleId;
@@ -551,7 +559,7 @@ export function TransferBookingSection({
                 return (
                   <label
                     key={v.id}
-                    className={`relative rounded-xl border p-3.5 transition-[border-color,opacity,background-color] duration-300 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[#4694A4] ${
+                    className={`relative rounded-xl border p-2.5 sm:p-3.5 transition-[border-color,opacity,background-color] duration-300 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[#4694A4] ${
                       tooSmall
                         ? 'border-neutral-200 opacity-45 cursor-not-allowed'
                         : selected
@@ -576,28 +584,28 @@ export function TransferBookingSection({
                       onChange={() => setVehicleId(v.id)}
                       className="sr-only"
                     />
-                    <span className="flex items-center justify-between gap-2">
-                      <span className="block text-[13px] font-medium text-[#171717]">{v.name}</span>
+                    <span className="flex items-center justify-between gap-1">
+                      <span className="block text-[12px] sm:text-[13px] font-medium text-[#171717] leading-tight">{v.name}</span>
                       <motion.span
                         aria-hidden="true"
                         animate={selected ? { x: [0, 6, 0], opacity: 1 } : { x: 0, opacity: 0.35 }}
                         transition={{ duration: 0.5, ease: 'easeOut' }}
-                        className="text-[#3E8E9E]"
+                        className="hidden sm:block text-[#3E8E9E]"
                       >
                         <Car className="w-4 h-4" />
                       </motion.span>
                     </span>
-                    <span className="block text-[11.5px] text-neutral-500 mt-0.5">
-                      Up to {v.seats} people · {v.bags} bags
+                    <span className="block text-[11px] sm:text-[11.5px] text-neutral-500 mt-0.5 leading-snug">
+                      Up to {v.seats} people
                     </span>
                     {price !== null && (
-                      <span className="flex items-baseline gap-1.5 mt-2">
+                      <span className="flex flex-wrap items-baseline gap-x-1.5 mt-1.5 sm:mt-2">
                         <span className="text-[13px] font-medium text-[#171717] tabular-nums">
                           {tooSmall ? 'Too small' : `$${price}`}
                         </span>
                         {/* per-person framing makes the group price easy to compare */}
                         {!tooSmall && passengers > 1 && (
-                          <span className="text-[11px] text-neutral-500 tabular-nums">
+                          <span className="text-[10.5px] sm:text-[11px] text-neutral-500 tabular-nums">
                             ≈ ${Math.ceil(price / passengers)} pp
                           </span>
                         )}
@@ -605,7 +613,7 @@ export function TransferBookingSection({
                     )}
                     {/* default effect: highlight the vehicle that fits the group */}
                     {v.id === bestFitId && (
-                      <span className="absolute -top-2.5 right-3 rounded-full bg-[#171717] text-white px-2 py-0.5 text-[10px] font-medium tracking-[0.02em]">
+                      <span className="absolute -top-2.5 right-2 sm:right-3 rounded-full bg-[#171717] text-white px-2 py-0.5 text-[10px] font-medium tracking-[0.02em] whitespace-nowrap">
                         Best fit
                       </span>
                     )}
@@ -615,11 +623,32 @@ export function TransferBookingSection({
             </div>
           </fieldset>
         </Row>
+        {/* notes stay out of the way until needed (most bookings have none) */}
         <Row>
-          <label htmlFor="tr-notes" className={labelClass}>
-            Anything else? <span className="text-neutral-400 font-normal">(child seats, surfboards, stops)</span>
-          </label>
-          <textarea id="tr-notes" rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} className={`${inputClass} resize-y`} />
+          {showNotes || notes ? (
+            <>
+              <label htmlFor="tr-notes" className={labelClass}>
+                Anything else? <span className="text-neutral-400 font-normal">(child seats, surfboards, stops)</span>
+              </label>
+              <textarea
+                id="tr-notes"
+                rows={2}
+                autoFocus={showNotes && !notes}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className={`${inputClass} resize-y`}
+              />
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowNotes(true)}
+              className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[#3E8E9E] hover:text-[#171717] transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" aria-hidden="true" />
+              Add a note (child seats, surfboards, stops)
+            </button>
+          )}
         </Row>
       </>
     ),
@@ -736,22 +765,22 @@ export function TransferBookingSection({
     <section
       id="book"
       className={`max-w-[1180px] mx-auto px-4 sm:px-6 md:px-10 scroll-mt-4 ${
-        compact ? 'pt-5 pb-8 sm:pt-8 lg:py-14' : 'py-14 lg:py-20'
+        compact ? 'pt-4 pb-8 sm:pt-6 lg:pt-7 lg:pb-12' : 'py-14 lg:py-20'
       }`}
     >
       {/* on the booking page the intro is compact on small screens, so the form starts higher */}
-      <div className={compact ? 'mb-5 sm:mb-8 lg:mb-10' : 'mb-10'}>
-        <Eyebrow className={compact ? 'mb-2 sm:mb-3' : 'mb-3'}>BOOK A TRANSFER</Eyebrow>
+      <div className={compact ? 'mb-3 sm:mb-4 lg:mb-5' : 'mb-10'}>
+        <Eyebrow className={compact ? 'mb-0 sm:mb-1.5' : 'mb-3'}>BOOK A TRANSFER</Eyebrow>
         <h2
           className={`font-normal tracking-[-0.02em] text-[#171717] leading-[1.15] text-balance ${
             compact
-              ? 'text-[24px] sm:text-[34px] lg:text-[44px] mb-0 sm:mb-3.5'
+              ? 'hidden sm:block sm:text-[28px] lg:text-[32px] mb-0'
               : 'text-[32px] sm:text-[40px] lg:text-[44px] mb-3.5'
           }`}
         >
           <SplitWords text="See your fixed price and book in *two* minutes" />
         </h2>
-        <p className={`text-[13px] sm:text-[14px] text-[#737373] max-w-[560px] leading-relaxed ${compact ? 'hidden sm:block' : ''}`}>
+        <p className={`text-[13px] sm:text-[14px] text-[#737373] max-w-[560px] leading-relaxed ${compact ? 'hidden' : ''}`}>
           Five quick steps. Your booking goes to us on WhatsApp and we confirm
           with your driver’s details. No payment until the day of your transfer.
         </p>
@@ -838,7 +867,7 @@ export function TransferBookingSection({
             className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start"
           >
             <motion.div ref={cardRef} animate={shake} className="lg:col-span-8 scroll-mt-24">
-              <div className="rounded-[22px] border border-neutral-200 bg-white p-4 sm:p-7 overflow-hidden">
+              <div className="rounded-[22px] border border-neutral-200 bg-white p-4 sm:p-6 overflow-hidden">
                 {/* Zeigarnik effect: welcome the visitor back to the booking they started */}
                 <AnimatePresence initial={false}>
                   {showWelcomeBack && route && (
@@ -850,7 +879,7 @@ export function TransferBookingSection({
                       transition={{ duration: 0.35, ease: EASE_OUT }}
                       className="overflow-hidden"
                     >
-                      <div role="status" className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl bg-[#4694A4]/8 border border-[#4694A4]/25 px-4 py-3">
+                      <div role="status" className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl bg-[#4694A4]/8 border border-[#4694A4]/25 px-4 py-3">
                         <p className="flex items-center gap-2 text-[13px] text-[#1F4E58]">
                           <History className="w-4 h-4 shrink-0" aria-hidden="true" />
                           <span>
@@ -890,26 +919,28 @@ export function TransferBookingSection({
                     exit="exit"
                     transition={{ duration: 0.38, ease: EASE_OUT }}
                   >
-                    {/* goal-gradient: the encouragement grows as the end gets closer */}
-                    <p className="text-[11.5px] text-neutral-500 tabular-nums">
-                      Step {step + 1} of {STEPS.length}
-                      <span className="text-[#3E8E9E] font-medium"> · {PROGRESS_LINES[step]}</span>
-                    </p>
-                    <h3
-                      ref={focusHeadingOnMount}
-                      tabIndex={-1}
-                      className="mt-1 mb-5 text-[22px] font-medium tracking-[-0.01em] text-[#171717] focus:outline-none"
-                    >
-                      {current.title}
-                    </h3>
-                    <motion.div variants={stepRowsVariants} initial="hidden" animate="show" className="space-y-5">
+                    {/* heading and goal-gradient progress share one line on larger screens */}
+                    <div className="mb-4 sm:flex sm:items-baseline sm:justify-between sm:gap-4">
+                      <p className="text-[11.5px] text-neutral-500 tabular-nums sm:order-2 sm:text-right sm:shrink-0">
+                        Step {step + 1} of {STEPS.length}
+                        <span className="text-[#3E8E9E] font-medium"> · {PROGRESS_LINES[step]}</span>
+                      </p>
+                      <h3
+                        ref={focusHeadingOnMount}
+                        tabIndex={-1}
+                        className="mt-0.5 sm:mt-0 sm:order-1 text-[19px] sm:text-[20px] font-medium tracking-[-0.01em] text-[#171717] focus:outline-none"
+                      >
+                        {current.title}
+                      </h3>
+                    </div>
+                    <motion.div variants={stepRowsVariants} initial="hidden" animate="show" className="space-y-4">
                       {screens[current.id]}
                     </motion.div>
                   </motion.div>
                 </AnimatePresence>
 
                 {/* navigation (on phones and tablets the sticky bottom bar takes over) */}
-                <div className="hidden lg:flex mt-7 pt-5 border-t border-neutral-200 items-center justify-between gap-3">
+                <div className="hidden lg:flex mt-5 pt-4 border-t border-neutral-200 items-center justify-between gap-3">
                   {step > 0 ? (
                     <button
                       type="button"
@@ -970,7 +1001,7 @@ export function TransferBookingSection({
                 </div>
 
                 {/* risk reversal: remove the fear of committing too early */}
-                <p className="mt-4 flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-1 text-[11.5px] text-neutral-500">
+                <p className="mt-3 flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-1 text-[11.5px] text-neutral-500">
                   <span className="inline-flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-[#3E8E9E]" aria-hidden="true" />
                     Nothing to pay now
@@ -989,7 +1020,7 @@ export function TransferBookingSection({
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '0px 0px -10% 0px' }}
               transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.2 }}
-              className="lg:col-span-4 lg:sticky lg:top-24 rounded-[22px] bg-[#161616] text-white p-6 sm:p-7 overflow-hidden"
+              className="hidden lg:block lg:col-span-4 lg:sticky lg:top-24 rounded-[22px] bg-[#161616] text-white p-6 overflow-hidden"
             >
               <p className="text-[11px] font-medium tracking-[0.06em] uppercase text-white/60 mb-4">Your price</p>
               {/* The price is always rendered once a town is chosen; the "finding your price"

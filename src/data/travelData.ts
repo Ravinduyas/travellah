@@ -32,7 +32,6 @@ export interface Vehicle {
   name: string;
   example: string;
   seats: number;
-  bags: number;
   multiplier: number;
   features: string[];
 }
@@ -101,7 +100,7 @@ export const NAV_LINKS = [
 
 export const ABOUT_STATS = [
   { value: '24/7', label: 'Airport pick-ups' },
-  { value: '10', label: 'South coast routes' },
+  { value: '7', label: 'South coast routes' },
   { value: '~2.5h', label: 'Airport to Weligama' },
 ];
 
@@ -163,9 +162,6 @@ export const TRANSFER_STEPS = [
 
 /** Approximate distances and drive times from CMB airport via the expressways. Prices are one way, sedan car, USD. */
 export const ROUTES: TransferRoute[] = [
-  { id: 'bentota', town: 'Bentota', area: 'South-west', distanceKm: 125, duration: '1h 45m', carPrice: 60 },
-  { id: 'galle', town: 'Galle & Galle Fort', area: 'South', distanceKm: 155, duration: '2h 10m', carPrice: 70, popular: true },
-  { id: 'unawatuna', town: 'Unawatuna', area: 'South', distanceKm: 160, duration: '2h 15m', carPrice: 72 },
   { id: 'ahangama', town: 'Ahangama & Midigama', area: 'South', distanceKm: 175, duration: '2h 30m', carPrice: 78, popular: true },
   { id: 'weligama', town: 'Weligama', area: 'South', distanceKm: 180, duration: '2h 30m', carPrice: 80, popular: true },
   { id: 'mirissa', town: 'Mirissa', area: 'South', distanceKm: 188, duration: '2h 40m', carPrice: 85, popular: true },
@@ -181,7 +177,6 @@ export const VEHICLES: Vehicle[] = [
     name: 'Sedan car',
     example: 'Toyota Axio / Prius or similar',
     seats: 3,
-    bags: 3,
     multiplier: 1,
     features: ['Air conditioning', 'Bottled water', 'Ideal for couples'],
   },
@@ -190,7 +185,6 @@ export const VEHICLES: Vehicle[] = [
     name: 'Family van',
     example: 'Toyota KDH or similar',
     seats: 8,
-    bags: 8,
     multiplier: 1.4,
     features: ['Air conditioning', 'Room for surfboards', 'Families & groups'],
   },
@@ -199,7 +193,6 @@ export const VEHICLES: Vehicle[] = [
     name: 'Mini coach',
     example: 'Toyota Coaster or similar',
     seats: 14,
-    bags: 14,
     multiplier: 2.2,
     features: ['Air conditioning', 'Large luggage space', 'Retreats & big groups'],
   },

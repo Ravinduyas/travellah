@@ -43,7 +43,7 @@ export function HomePage() {
             All routes and prices <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {popularRoutes.map((r, i) => (
             <Reveal key={r.id} delay={i * 0.08}>
             <BookingLink

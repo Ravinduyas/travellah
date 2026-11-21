@@ -148,7 +148,7 @@ export function HeroSection() {
           <div className="max-w-[400px]">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-black/22 backdrop-blur-sm px-3.5 py-1.5 text-[12px] text-white/95 mb-3">
               <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-              <span>Galle · Weligama · Mirissa · Tangalle</span>
+              <span>Ahangama · Weligama · Mirissa · Tangalle</span>
             </div>
             <p className="text-[13px] sm:text-[14px] text-white/92 leading-[1.55] font-light">
               Private airport transfers at fixed prices, plus tour packages
